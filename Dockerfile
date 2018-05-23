@@ -33,8 +33,12 @@ RUN cd /root && wget http://www.cmake.org/files/v3.8/cmake-3.8.1.tar.gz && \
 # Install Cython
 RUN pip install Cython
 
+RUN pip install Mako
+
 # Clone libgpuarray repo and move into it
 RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
+# Switch to an older version
+  git checkout tags/v0.6.2 && \
 # Make and move into build directory
   mkdir Build && cd Build && \
 # CMake
@@ -51,4 +55,12 @@ RUN cd /root/libgpuarray && \
 RUN pip install pip==9.0.3
 RUN pip install --upgrade six
 RUN pip install Theano==0.9.0
+
+# Include .theanorc
+COPY theanorc /root/.theanorc
+
+RUN cp /usr/include/cudnn.h /usr/local/cuda/include/ && \
+    cp /usr/lib/x86_64-linux-gnu/libcudnn* /usr/local/cuda/lib64/
+
+
 
