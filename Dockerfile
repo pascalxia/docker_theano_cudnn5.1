@@ -30,10 +30,8 @@ RUN cd /root && wget http://www.cmake.org/files/v3.8/cmake-3.8.1.tar.gz && \
   make -j "$(nproc)" && \
   make install
 
-# Install Cython
-RUN pip install Cython
-
-RUN pip install Mako
+# Install Cython and Mako
+RUN pip install Cython Mako
 
 # Clone libgpuarray repo and move into it
 RUN cd /root && git clone https://github.com/Theano/libgpuarray.git && cd libgpuarray && \
@@ -59,6 +57,7 @@ RUN pip install Theano==0.9.0
 # Include .theanorc
 COPY theanorc /root/.theanorc
 
+# Move include files for GpuArray
 RUN cp /usr/include/cudnn.h /usr/local/cuda/include/ && \
     cp /usr/lib/x86_64-linux-gnu/libcudnn* /usr/local/cuda/lib64/
 
